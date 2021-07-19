@@ -17,15 +17,25 @@ namespace capstone.Data
         public IConfiguration Configuration { get; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Book> Books { get; set; }
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
 
         }
-        public ApplicationDbContext() : base(new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite("Data Source=app.db").Options,null)
+        public ApplicationDbContext() : base(new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite("Data Source=app.db").Options, null)
         {
 
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Book>()
+                .HasData(
+                new Book { Id = 1, title = "To Kill A Monkingbird", author = "Harper Lee", publisher = "J. B. Lippincott & Co.", published = new DateTime(1960, 7, 11) } 
+                );
+            base.OnModelCreating(builder);
         }
     }
 }
